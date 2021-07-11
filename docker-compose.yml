@@ -1,0 +1,73 @@
+version: "3.7"
+services:
+
+  app-nginx:
+    build:
+      context: ./app/docker
+      dockerfile: dev/nginx/Dockerfile
+    container_name: lvue__app_nginx
+    hostname: lvue__app_nginx
+    volumes:
+      - ./app:/app
+      - ./app/storage/logs:/var/log/nginx
+    ports:
+      - 192.168.179.1:8080:80
+    restart: always
+
+  app-php-fpm:
+    build:
+      context: ./app/docker
+      dockerfile: dev/php-fpm/Dockerfile
+    container_name: lvue__app_php-fpm
+    hostname: lvue__app_php-fpm
+    environment:
+      TERM: xterm-256color
+    volumes:
+      - ./app:/app
+      - ./app/docker/dev/php/.bashrc:/root/.bashrc
+
+  app-db:
+    image: mysql:8
+    container_name: lvue__app_db
+    hostname: lvue__app_db
+    restart: always
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: lvue_db
+    ports:
+      - 192.168.179.1:3306:3306
+    volumes:
+      - ./app/storage/db/:/var/lib/mysql/
+
+  front-nginx:
+    build:
+      context: ./front/docker
+      dockerfile: dev/nginx/Dockerfile
+    container_name: lvue__front_nginx
+    hostname: lvue__front_nginx
+    volumes:
+      - ./front:/app
+      - ./front/storage/logs:/var/log/nginx
+    ports:
+      - 192.168.179.1:8081:80
+
+  front-node:
+    build:
+      context: ./front/docker
+      dockerfile: dev/node/Dockerfile
+    container_name: lvue__front_node
+    hostname: lvue__front_node
+    volumes:
+      - ./front:/app
+    working_dir: /app
+    tty: true  #позволяет процесу nodejs висеть постояно
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.179.0/24
