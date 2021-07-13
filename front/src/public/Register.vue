@@ -143,6 +143,7 @@
 </template>
 
 <script>
+
 import {ref} from 'vue';
 import axios from 'axios'
 import {useRouter} from 'vue-router'
@@ -156,9 +157,7 @@ export default {
     const router = useRouter()
 
     const submit = async () => {
-      const url = 'http://192.168.179.1:8080/api/v1/register';
-
-      await axios.post(url, {
+      await axios.post('register', {
         name: name.value,
         email: email.value,
         password: password.value

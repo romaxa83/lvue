@@ -17,7 +17,7 @@ class RegisterRequest extends FormRequest
         return [
             'name'  => ['required', 'string'],
             'email'  => ['required', 'email'],
-            // @see https://laravel.com/docs/8.x/validation#validating-passwords
+//             @see https://laravel.com/docs/8.x/validation#validating-passwords
             'password'  => ['required', 'string', Password::min(5)],
         ];
     }

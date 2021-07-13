@@ -140,20 +140,23 @@ export default {
     const router = useRouter()
 
     const submit = async () => {
-      const url = 'http://192.168.179.1:8080/api/v1/login';
-      const firstUrl = 'http://192.168.179.1:8080/sanctum/csrf-cookie';
+      const headers = {
+        'Access-Control-Allow-Origin' : '*',
+        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+      };
 
-      const res = await axios.get(firstUrl)
-      console.log(res);
-
-
-      await axios.post(url, {
+      const res = await axios.post('login', {
         email: email.value,
         password: password.value
-      })
+      },{headers})
 
-      await router.push('/login')
+      localStorage.setItem('token', res.data.token);
+
+      // await router.push('/')
     };
+
+
+
 
     return {
       email,

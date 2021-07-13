@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api\V1\Auth;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Requests\Api\V1\Auth\LoginRequest;
 use App\Http\Requests\Api\V1\Auth\RegisterRequest;
+use App\Models\User\User;
 use App\Repositories\User\UserRepository;
 use App\Resources\User\UserResource;
 use App\Services\User\UserService;
+use Illuminate\Http\Request;
 
 class AuthController extends ApiController
 {
@@ -30,16 +32,26 @@ class AuthController extends ApiController
 
     public function login(LoginRequest $request)
     {
-        dd($request);
         try {
-
+            /** @var $user User */
             $user = $this->userRepository->findOneBy('email', $request['email']);
 
-            dd($user);
+            if(!$user || !\Hash::check($request->password, $user->password)){
+                return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
+            }
 
-            $model = $this->userService->create($request->all());
+            return response()->json(['token' => $user->createToken($user->email)->plainTextToken]);
+        } catch (\Exception $e){
+            return $this->errorJsonMessage($e->getMessage(), $e->getCode());
+        }
+    }
 
-            return UserResource::make($model);
+    public function user(Request $request)
+    {
+        try {
+            $user = \Auth::user();
+
+            return response()->json([]);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
