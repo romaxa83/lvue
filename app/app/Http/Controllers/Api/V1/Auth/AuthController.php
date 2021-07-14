@@ -8,6 +8,7 @@ use App\Http\Requests\Api\V1\Auth\RegisterRequest;
 use App\Models\User\User;
 use App\Repositories\User\UserRepository;
 use App\Resources\User\UserResource;
+use App\Services\Auth\UserPassportService;
 use App\Services\User\UserService;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,8 @@ class AuthController extends ApiController
 {
     public function __construct(
         protected UserService $userService,
-        protected UserRepository $userRepository
+        protected UserRepository $userRepository,
+        protected UserPassportService $passportService
     )
     {}
 
@@ -40,7 +42,11 @@ class AuthController extends ApiController
                 return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
             }
 
-            return response()->json(['token' => $user->createToken($user->email)->plainTextToken]);
+            $tokens = $this->passportService->auth($user->id, $request->password);
+
+            \Auth::login($user);
+
+            return $this->successJsonMessage($tokens);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
@@ -51,7 +57,8 @@ class AuthController extends ApiController
         try {
             $user = \Auth::user();
 
-            return response()->json([]);
+            return UserResource::make($user);
+
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }

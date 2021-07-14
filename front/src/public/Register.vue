@@ -154,10 +154,10 @@ export default {
     const name = ref('');
     const email = ref('');
     const password = ref('');
-    const router = useRouter()
+    const router = useRouter();
 
     const submit = async () => {
-      await axios.post('register', {
+      await axios.post('/register', {
         name: name.value,
         email: email.value,
         password: password.value

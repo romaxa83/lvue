@@ -140,19 +140,17 @@ export default {
     const router = useRouter()
 
     const submit = async () => {
-      const headers = {
-        'Access-Control-Allow-Origin' : '*',
-        'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-      };
 
-      const res = await axios.post('login', {
+      const res = await axios.post('/login', {
         email: email.value,
         password: password.value
-      },{headers})
+      })
 
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('token', res.data.data.access_token);
+      localStorage.setItem('tokenRefresh', res.data.data.refresh_token);
+      axios.defaults.headers['Authorization'] = `Bearer ${res.data.data.access_token}`;
 
-      // await router.push('/')
+      await router.push('/')
     };
 
 
