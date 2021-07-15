@@ -9,4 +9,6 @@ Route::post('register', [V1\Auth\AuthController::class, 'register'])->name('api.
 Route::middleware('auth:api')->group(function() {
 
     Route::get('user', [V1\Auth\AuthController::class, 'user'])->name('api.v1.auth.user');
+
+    Route::get('users', [V1\User\UserController::class, 'list'])->name('api.v1.user.list');
 });
