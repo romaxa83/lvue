@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,8 @@ use Illuminate\Http\Response;
 
 abstract class AbstractRepository
 {
+    const DEFAULT_LIMIT = 10;
+
     protected Model $model;
 
     public function __construct()
@@ -31,6 +34,13 @@ abstract class AbstractRepository
     public function getAll(array $relations = [], $sortField = 'id', $sort = 'asc'): Collection
     {
         return $this->getAllQuery($relations, $sortField, $sort)->get();
+    }
+
+    public function getAllPaginator(array $params, array $relations = [], $sortField = 'id', $sort = 'asc'): LengthAwarePaginator
+    {
+        $perPage = $params['perPage'] ?? self::DEFAULT_LIMIT;
+
+        return $this->getAllQuery($relations, $sortField, $sort)->paginate($perPage);
     }
 
     public function getAllWithCount(array $relations = []): Collection

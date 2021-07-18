@@ -3,73 +3,73 @@
 namespace App\Http\Controllers\Api\V1\User;
 
 use App\Http\Controllers\Api\ApiController;
-use App\Http\Requests\Api\V1\User as UserRequest;
-use App\Models\User\User;
-use App\Repositories\User\UserRepository;
-use App\Resources\User\UserResource;
-use App\Services\User\UserService;
+use App\Models\User\Role;
+use App\Repositories\User\RoleRepository;
+use App\Resources\User\RoleResource;
+use App\Services\User\RoleService;
 use Illuminate\Http\Request;
+use App\Http\Requests\Api\V1\Role as RoleRequest;
 
-class UserController extends ApiController
+class RoleController extends ApiController
 {
     public function __construct(
-        protected UserService $userService,
-        protected UserRepository $userRepository
+        protected RoleRepository $roleRepository,
+        protected RoleService $roleService
     )
     {}
 
     public function list(Request $request)
     {
         try {
-            $models = $this->userRepository->getAllPaginator($request->all());
+            $models = $this->roleRepository->getAll();
 
-            return UserResource::collection($models);
+            return RoleResource::collection($models);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
     }
 
-    public function one(User $user)
+    public function one(Role $role)
     {
         try {
-
-            return UserResource::make($user);
+            return RoleResource::make($role);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
     }
 
-    public function create(UserRequest\Create $request)
+    public function create(RoleRequest\Create $request)
     {
         try {
-            $model = $this->userService->create($request->all());
+            $model = $this->roleService->create($request->all());
 
-            return UserResource::make($model);
+            return RoleResource::make($model);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
     }
 
-    public function edit(UserRequest\Update $request, User $user)
+    public function edit(RoleRequest\Update $request, Role $role)
     {
         try {
+            $model = $this->roleService->edit($request->all(), $role);
 
-            $model = $this->userService->edit($request->all(), $user);
-
-            return UserResource::make($model);
+            return RoleResource::make($model);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
     }
 
-    public function delete(Request $request, User $user)
+    public function delete(Request $request, Role $role)
     {
         try {
-            $user->forceDelete();
+            $role->forceDelete();
 
             return $this->successJsonMessage([]);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
     }
+
 }
+

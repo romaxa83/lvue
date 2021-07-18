@@ -2,21 +2,20 @@
 
 namespace App\Services\User;
 
-use App\Models\User\User;
+use App\Models\User\Role;
 use DB;
-use Illuminate\Support\Facades\Hash;
 
-class UserService
+class RoleService
 {
-    public function create(array $data): User
+    public function create(array $data): Role
     {
         DB::beginTransaction();
         try {
 
-            $model = new User();
+            $model = new Role();
             $model->name = $data['name'];
-            $model->email = $data['email'];
-            $model->password = Hash::make($data['password']);
+            $model->sort = $data['sort'] ?? 0;
+            $model->active = $data['active'] ?? true;
 
             $model->save();
 
@@ -30,13 +29,12 @@ class UserService
         }
     }
 
-    public function edit(array $data, User $model): User
+    public function edit(array $data, Role $model): Role
     {
         DB::beginTransaction();
         try {
 
             $model->name = $data['name'];
-            $model->email = $data['email'];
 
             $model->save();
 
@@ -50,3 +48,4 @@ class UserService
         }
     }
 }
+
