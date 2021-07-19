@@ -21,7 +21,7 @@ class RoleController extends ApiController
     public function list(Request $request)
     {
         try {
-            $models = $this->roleRepository->getAll();
+            $models = $this->roleRepository->getAll(['permissions']);
 
             return RoleResource::collection($models);
         } catch (\Exception $e){

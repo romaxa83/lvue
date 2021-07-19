@@ -22,4 +22,6 @@ Route::middleware('auth:api')->group(function() {
     Route::post('roles', [V1\User\RoleController::class, 'create'])->name('api.v1.role.create');
     Route::post('roles/{role}', [V1\User\RoleController::class, 'edit'])->name('api.v1.role.edit');
     Route::delete('roles/{role}', [V1\User\RoleController::class, 'delete'])->name('api.v1.role.delete');
+    // Permissions
+    Route::get('permissions', [V1\User\PermissionController::class, 'list'])->name('api.v1.permission.list');
 });

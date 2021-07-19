@@ -4,6 +4,7 @@ namespace App\Models\User;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @property int id
@@ -18,11 +19,19 @@ class Role extends Model
 {
     use HasFactory;
 
-    public const TABLE_NAME = 'roles';
     protected $table = 'roles';
 
     protected $casts = [
         'active' => 'boolean',
     ];
+
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Permission::class,
+            'role_permission_relations',
+            'role_id', 'permission_id'
+        );
+    }
 }
 

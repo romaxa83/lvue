@@ -67,6 +67,29 @@
               </div>
             </div>
 
+            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <label for="name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                Permissions
+              </label>
+              <div class="mt-1 sm:mt-0 sm:col-span-2">
+                <div class="mt-2">
+                  <div
+                      v-for="permission in permissions"
+                      :key="permission.id"
+                  >
+                    <label class="inline-flex items-center">
+                      <input
+                          type="checkbox"
+                          :value="permission.id"
+                          @change="select(permission.id, $event.target.checked)"
+                          class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                      <span class="ml-2">{{ permission.name }}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -89,9 +112,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 
-import {ref} from 'vue';
+import {ref, onMounted} from 'vue';
 import axios from 'axios';
 import {useRouter} from "vue-router";
 
@@ -99,11 +122,30 @@ export default {
   name: "RoleCreate",
   setup() {
     const name = ref('');
+    const permissions = ref([]);
+    const selected = ref([] as number[]);
     const router = useRouter();
 
+    onMounted(async () => {
+      const res = await axios.get('/permissions');
+
+      permissions.value = res.data.data;
+    })
+
+    const select = (id: number, checked: boolean) => {
+      if(checked) {
+        selected.value = [...selected.value, id];
+        return;
+      }
+
+      selected.value = selected.value.filter(s => s !== id);
+    };
+
     const submit = async () => {
+
       await axios.post(`/roles`, {
         name: name.value,
+        permissions: selected.value
       });
 
       await router.push('/roles');
@@ -111,6 +153,8 @@ export default {
 
     return {
       name,
+      permissions,
+      select,
       submit
     }
   }

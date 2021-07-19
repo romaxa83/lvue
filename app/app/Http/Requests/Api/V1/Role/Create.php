@@ -17,6 +17,7 @@ class Create extends FormRequest
             'name'  => ['required', 'string'],
             'sort'  => ['nullable', 'number'],
             'active'  => ['nullable', 'boolean'],
+            'permissions'  => ['required', 'array'],
         ];
     }
 }

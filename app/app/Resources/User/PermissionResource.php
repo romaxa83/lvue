@@ -2,20 +2,19 @@
 
 namespace App\Resources\User;
 
-use App\Models\User\Role;
+use App\Models\User\Permission;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoleResource extends JsonResource
+class PermissionResource extends JsonResource
 {
     public function toArray($request)
     {
-        /** @var Role $model */
+        /** @var Permission $model */
         $model = $this->resource;
 
         return [
             'id' => $model->id,
             'name' => $model->name,
-            'permissions' => PermissionResource::collection($model->permissions)
         ];
     }
 }

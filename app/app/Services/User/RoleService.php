@@ -19,6 +19,10 @@ class RoleService
 
             $model->save();
 
+            foreach ($data['permissions'] ?? [] as $item){
+                $model->permissions()->attach($item);
+            }
+
             DB::commit();
 
             return $model;
