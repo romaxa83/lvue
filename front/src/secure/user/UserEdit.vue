@@ -157,8 +157,9 @@ export default {
       const userCall = await axios.get(`users/${params.id}`);
 
       const user: User = userCall.data.data;
-      name.value = user.name
-      email.value = user.email
+      name.value = user.name;
+      email.value = user.email;
+      roleId.value = user.role.id;
     })
 
     const submit = async () => {

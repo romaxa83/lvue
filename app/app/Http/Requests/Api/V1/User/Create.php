@@ -19,6 +19,7 @@ class Create extends FormRequest
             'email'  => ['required', 'email'],
 //             @see https://laravel.com/docs/8.x/validation#validating-passwords
             'password'  => ['required', 'string', Password::min(5)],
+            'roleId'  => ['required', 'integer'],
         ];
     }
 }

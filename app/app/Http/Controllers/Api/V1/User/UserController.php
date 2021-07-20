@@ -21,7 +21,7 @@ class UserController extends ApiController
     public function list(Request $request)
     {
         try {
-            $models = $this->userRepository->getAllPaginator($request->all());
+            $models = $this->userRepository->getAllPaginator($request->all(), ['role.permissions']);
 
             return UserResource::collection($models);
         } catch (\Exception $e){

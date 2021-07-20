@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Services\Product;
 
+use App\Models\Product\Product;
 use App\Models\User\Role;
 use DB;
 
-class RoleService
+class ProductService
 {
-    public function create(array $data): Role
+    public function create(array $data): Product
     {
         DB::beginTransaction();
         try {
 
-            $model = new Role();
-            $model->name = $data['name'];
+            $model = new Product();
+            $model->title = $data['title'];
+            $model->description = $data['description'];
+            $model->price = $data['pricee'];
             $model->sort = $data['sort'] ?? 0;
             $model->active = $data['active'] ?? true;
 
             $model->save();
-
-            foreach ($data['permissions'] ?? [] as $item){
-                $model->permissions()->attach($item);
-            }
 
             DB::commit();
 
@@ -33,17 +32,12 @@ class RoleService
         }
     }
 
-    public function edit(array $data, Role $model): Role
+    public function edit(array $data, Product $model): Product
     {
         DB::beginTransaction();
         try {
 
-            $model->name = $data['name'];
-
-            $model->permissions()->detach();
-            foreach ($data['permissions'] ?? [] as $item){
-                $model->permissions()->attach($item);
-            }
+            $model->title = $data['title'];
 
             $model->save();
 

@@ -18,7 +18,7 @@
             <svg class="flex-shrink-0 w-6 h-full text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Users</a>
+            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Products</a>
           </div>
         </li>
       </ol>
@@ -29,7 +29,7 @@
     <div class="flex ...">
       <div class="flex-none w-16 h-16">
         <div class="px-4 sm:px-6 md:px-0">
-          <h1 class="text-3xl font-extrabold text-gray-900">Users</h1>
+          <h1 class="text-3xl font-extrabold text-gray-900">Products</h1>
         </div>
       </div>
       <div class="flex-grow h-16">
@@ -38,7 +38,7 @@
       <div class="flex-none w-16 h-16">
         <div class="px-4 sm:px-6 md:px-0">
           <router-link
-              to="/users/create"
+              to="/products/create"
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Add
@@ -62,45 +62,55 @@
                       ID
                     </th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Name
+                      Image
                     </th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email
+                      Title
                     </th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Roles
+                      Description
                     </th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
+                      Price
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Action
                     </th>
                   </tr>
                   </thead>
                   <tbody>
                   <tr
-                      v-for="user in users"
-                      :key="user.id"
+                      v-for="product in products"
+                      :key="product.id"
                       class="bg-white"
                   >
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {{user.id}}
+                      {{ product.id }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <img
+                          :src="product.image"
+                          height="50"
+                          alt=""
+                      >
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {{user.name}}
+                      {{ product.title }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {{user.email}}
+                      {{ product.description }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {{user.role.name}}
+                      {{ product.price }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <router-link
-                          :to="`/users/${user.id}/edit`"
-                         class="text-indigo-600 hover:text-indigo-900">
+                          :to="`/products/${product.id}/edit`"
+                          class="text-indigo-600 hover:text-indigo-900">
                         Edit
                       </router-link>
                       <a href="javascript:void(0)"
-                         @click="del(user.id)"
+                         @click="del(product.id)"
                          class="px-4 text-red-600 hover:text-red-900">
                         Delete
                       </a>
@@ -172,58 +182,54 @@
 </template>
 
 <script lang="ts">
-  import {onMounted, ref} from 'vue';
-  import axios from 'axios';
-  import {Entity} from '@/interfaces/entity';
+import {onMounted, ref} from 'vue';
+import axios from 'axios';
+import {Entity} from '@/interfaces/entity';
 
-  export default {
-    name: "Users",
-    setup() {
-      const users = ref([]);
-      const page = ref(1);
-      const lastPage = ref(0);
+export default {
+  name: "Products",
+  setup() {
+    const products = ref([]);
+    const page = ref(1);
+    const lastPage = ref(0);
 
-      const load = async () => {
-        const res = await axios.get(`/users?page=${page.value}`);
+    const load = async () => {
+      const res = await axios.get(`/products?page=${page.value}`);
 
-        users.value = res.data.data;
-        lastPage.value = res.data.meta.last_page;
+      products.value = res.data.data;
+      lastPage.value = res.data.meta.last_page;
+    };
 
-        // console.log(lastPage);
-      };
+    const next = async () => {
 
-      const next = async () => {
+      if(page.value === lastPage.value) return;
+      page.value++;
+      await load();
+    };
 
-        if(page.value === lastPage.value) return;
-        page.value++;
-        await load();
-      };
+    const prev = async () => {
 
-      const prev = async () => {
+      if(page.value === 1) return;
+      page.value--;
+      await load();
+    };
 
-        if(page.value === 1) return;
-        page.value--;
-        await load();
-      };
+    const del = async (id: number) => {
+      if(confirm('Are you sure you want to delete this record?')){
+        await axios.delete(`/products/${id}`)
 
-      const del = async (id: number) => {
+        products.value = products.value.filter((u: Entity) => u.id !== id);
+      }
+    };
 
-        if(confirm('Are you sure you want to delete this record?')){
-          await axios.delete(`/users/${id}`)
+    onMounted(load);
 
-          users.value = users.value.filter((u: Entity) => u.id !== id);
-        }
-      };
-
-
-      onMounted(load);
-
-      return {
-        users,
-        next,
-        prev,
-        del
-      };
-    }
+    return {
+      products,
+      next,
+      prev,
+      del
+    };
   }
+}
 </script>

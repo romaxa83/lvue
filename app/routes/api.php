@@ -22,6 +22,12 @@ Route::middleware('auth:api')->group(function() {
     Route::post('roles', [V1\User\RoleController::class, 'create'])->name('api.v1.role.create');
     Route::post('roles/{role}', [V1\User\RoleController::class, 'edit'])->name('api.v1.role.edit');
     Route::delete('roles/{role}', [V1\User\RoleController::class, 'delete'])->name('api.v1.role.delete');
+    // Product
+    Route::get('products', [V1\Product\ProductController::class, 'list'])->name('api.v1.product.list');
+    Route::get('products/{product}', [V1\Product\ProductController::class, 'one'])->name('api.v1.product.one');
+    Route::post('products', [V1\Product\ProductController::class, 'create'])->name('api.v1.product.create');
+    Route::post('products/{product}', [V1\Product\ProductController::class, 'edit'])->name('api.v1.product.edit');
+    Route::delete('products/{product}', [V1\Product\ProductController::class, 'delete'])->name('api.v1.product.delete');
     // Permissions
     Route::get('permissions', [V1\User\PermissionController::class, 'list'])->name('api.v1.permission.list');
 });

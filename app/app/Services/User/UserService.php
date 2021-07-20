@@ -17,6 +17,7 @@ class UserService
             $model->name = $data['name'];
             $model->email = $data['email'];
             $model->password = Hash::make($data['password']);
+            $model->role_id = $data['roleId'];
 
             $model->save();
 
@@ -37,6 +38,7 @@ class UserService
 
             $model->name = $data['name'];
             $model->email = $data['email'];
+            $model->role_id = $data['roleId'];
 
             $model->save();
 

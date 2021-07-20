@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Resources\User;
+namespace App\Resources\Product;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class UserCollections extends ResourceCollection
+class ProductCollections extends ResourceCollection
 {
     public function toArray($request): array
     {
@@ -16,3 +16,4 @@ class UserCollections extends ResourceCollection
         ];
     }
 }
+

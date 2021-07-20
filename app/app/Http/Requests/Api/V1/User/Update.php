@@ -16,6 +16,7 @@ class Update extends FormRequest
         return [
             'name'  => ['required', 'string'],
             'email'  => ['required', 'email'],
+            'roleId'  => ['required', 'integer'],
         ];
     }
 }

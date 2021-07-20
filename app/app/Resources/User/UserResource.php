@@ -16,6 +16,7 @@ class UserResource extends JsonResource
             'id' => $model->id,
             'name' => $model->name,
             'email' => $model->email,
+            'role' => RoleResource::make($model->role)
         ];
     }
 }

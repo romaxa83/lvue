@@ -68,6 +68,31 @@
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
               </div>
             </div>
+
+            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+              <label for="name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                Permissions
+              </label>
+              <div class="mt-1 sm:mt-0 sm:col-span-2">
+                <div class="mt-2">
+                  <div
+                      v-for="permission in permissions"
+                      :key="permission.id"
+                  >
+                    <label class="inline-flex items-center">
+                      <input
+                          type="checkbox"
+                          :checked="checked(permission.id)"
+                          :value="permission.id"
+                          @change="select(permission.id, $event.target.checked)"
+                          class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                      <span class="ml-2">{{ permission.name }}</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -102,31 +127,52 @@ import {useRoute, useRouter} from "vue-router";
 import {Role} from "@/classes/role";
 
 export default {
-  name: "UserEdit",
+  name: "RolesEdit",
   setup() {
     const name = ref('');
+    const permissions = ref([]);
+    const selected = ref([] as number[]);
     const router = useRouter();
     const {params} = useRoute();
 
     onMounted(async () => {
+      const res = await axios.get('/permissions');
+
+      permissions.value = res.data.data;
 
       const roleCall = await axios.get(`roles/${params.id}`);
 
       const role: Role = roleCall.data.data;
-      name.value = role.name
-    })
+      name.value = role.name;
+      selected.value = role.permissions.map(p => p.id);
+    });
+
+    const select = (id: number, checked: boolean) => {
+      if(checked) {
+        selected.value = [...selected.value, id];
+        return;
+      }
+
+      selected.value = selected.value.filter(s => s !== id);
+    };
 
     const submit = async () => {
       await axios.post(`/roles/${params.id}`, {
-        name: name.value
+        name: name.value,
+        permissions: selected.value
       });
 
       await router.push('/roles');
     }
 
+    const checked = (id: number) => selected.value.some(s => s === id);
+
     return {
       name,
-      submit
+      permissions,
+      submit,
+      select,
+      checked
     }
   }
 }
