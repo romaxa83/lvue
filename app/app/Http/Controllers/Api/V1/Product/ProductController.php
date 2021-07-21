@@ -21,7 +21,7 @@ class ProductController extends ApiController
     public function list(Request $request)
     {
         try {
-            $models = $this->repository->getAll();
+            $models = $this->repository->getAllPaginator($request->all());
 
             return ProductResource::collection($models);
         } catch (\Exception $e){

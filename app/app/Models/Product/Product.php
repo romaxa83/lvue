@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string title
  * @property string description
  * @property string price
+ * @property string image
  * @property string created_at
  * @property string updated_at
  */

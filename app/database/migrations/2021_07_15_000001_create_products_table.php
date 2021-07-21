@@ -13,8 +13,9 @@ class CreateProductsTable extends Migration
             $table->boolean('active')->default(true);
             $table->integer('sort')->default(0);
             $table->string('title');
-            $table->text('description');
-            $table->string('price');
+            $table->text('description')->nullable( );
+            $table->string('image')->nullable();
+            $table->decimal('price');
             $table->timestamps();
         });
     }

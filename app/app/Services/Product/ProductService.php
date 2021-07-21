@@ -3,8 +3,10 @@
 namespace App\Services\Product;
 
 use App\Models\Product\Product;
-use App\Models\User\Role;
+use Illuminate\Support\Facades\Storage;
 use DB;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 class ProductService
 {
@@ -16,9 +18,21 @@ class ProductService
             $model = new Product();
             $model->title = $data['title'];
             $model->description = $data['description'];
-            $model->price = $data['pricee'];
+            $model->price = $data['price'];
             $model->sort = $data['sort'] ?? 0;
             $model->active = $data['active'] ?? true;
+
+            if(isset($data['image'])){
+                /** @var $file UploadedFile */
+                $file = $data['image'];
+
+                $basename = Str::random(10);
+
+                $url = Storage::disk('public')
+                    ->putFileAs('product/image', $file, $basename. '.' . $file->extension());
+
+                $model->image = env('APP_URL') .'/storage/'. $url;
+            }
 
             $model->save();
 
@@ -26,6 +40,7 @@ class ProductService
 
             return $model;
         } catch (\Throwable $e) {
+
             DB::rollBack();
             \Log::error($e->getMessage());
             throw new \Exception($e->getMessage());
