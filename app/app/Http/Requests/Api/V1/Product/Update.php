@@ -19,6 +19,7 @@ class Update extends FormRequest
             'price' => ['required', 'string'],
             'sort' => ['nullable', 'number'],
             'active' => ['nullable', 'boolean'],
+            'image' => ['nullable', 'string'],
         ];
     }
 }

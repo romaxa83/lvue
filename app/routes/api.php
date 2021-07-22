@@ -28,6 +28,14 @@ Route::middleware('auth:api')->group(function() {
     Route::post('products', [V1\Product\ProductController::class, 'create'])->name('api.v1.product.create');
     Route::post('products/{product}', [V1\Product\ProductController::class, 'edit'])->name('api.v1.product.edit');
     Route::delete('products/{product}', [V1\Product\ProductController::class, 'delete'])->name('api.v1.product.delete');
+    // Order
+    Route::get('orders', [V1\Order\OrderController::class, 'list'])->name('api.v1.order.list');
+    Route::get('orders/{order}', [V1\Order\OrderController::class, 'one'])->name('api.v1.order.one');
+    Route::post('orders', [V1\Order\OrderController::class, 'create'])->name('api.v1.order.create');
+    Route::post('orders/{order}', [V1\Order\OrderController::class, 'edit'])->name('api.v1.order.edit');
+    Route::delete('order/{order}', [V1\Order\OrderController::class, 'delete'])->name('api.v1.order.delete');
     // Permissions
     Route::get('permissions', [V1\User\PermissionController::class, 'list'])->name('api.v1.permission.list');
+    // Upload
+    Route::post('upload', [V1\Media\UploadController::class, 'upload'])->name('api.v1.file.upload');
 });

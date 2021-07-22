@@ -19,7 +19,7 @@ class Create extends FormRequest
             'price' => ['required', 'string'],
             'sort' => ['nullable', 'number'],
             'active' => ['nullable', 'boolean'],
-            'image' => ['nullable'],
+            'image' => ['nullable', 'string'],
         ];
     }
 }

@@ -27,7 +27,7 @@
             <svg class="flex-shrink-0 w-6 h-full text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
             </svg>
-            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Create product</a>
+            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Edit product</a>
           </div>
         </li>
       </ol>
@@ -42,10 +42,10 @@
         <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
           <div>
             <h3 class="text-lg leading-6 font-medium text-gray-900">
-              Create product
+              Edit product
             </h3>
             <p class="mt-1 max-w-2xl text-sm text-gray-500">
-              Create some product
+              Edit some product
             </p>
           </div>
           <div class="space-y-6 sm:space-y-5">
@@ -96,23 +96,23 @@
               </div>
             </div>
 
-<!--            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">-->
-<!--              <label for="image" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">-->
-<!--                Image-->
-<!--              </label>-->
-<!--              <div class="mt-1 sm:mt-0 sm:col-span-2">-->
-<!--                <input-->
-<!--                    type="text"-->
-<!--                    name="image"-->
-<!--                    id="image"-->
-<!--                    placeholder="Price"-->
-<!--                    v-model="image"-->
-<!--                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">-->
-<!--                <label>-->
-<!--                  Upload <input type="file" hidden  />-->
-<!--                </label>-->
-<!--              </div>-->
-<!--            </div>-->
+            <!--            <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">-->
+            <!--              <label for="image" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">-->
+            <!--                Image-->
+            <!--              </label>-->
+            <!--              <div class="mt-1 sm:mt-0 sm:col-span-2">-->
+            <!--                <input-->
+            <!--                    type="text"-->
+            <!--                    name="image"-->
+            <!--                    id="image"-->
+            <!--                    placeholder="Price"-->
+            <!--                    v-model="image"-->
+            <!--                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">-->
+            <!--                <label>-->
+            <!--                  Upload <input type="file" hidden  />-->
+            <!--                </label>-->
+            <!--              </div>-->
+            <!--            </div>-->
 
             <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
               <label for="image" class="block text-sm font-medium text-gray-700">
@@ -180,23 +180,33 @@
 
 <script lang="ts">
 import {onMounted, ref} from "vue";
-import {useRouter} from "vue-router";
+import {useRouter, useRoute} from "vue-router";
 import axios from "axios";
+import {Product} from "@/classes/product";
 
 export default {
-  name: "ProductCreate",
+  name: "ProductEdit",
   setup() {
     const title = ref('');
     const description = ref('');
     const price = ref(0);
     const image = ref('');
     const router = useRouter();
+    const {params} = useRoute();
 
     onMounted(async () => {
-    })
+      const res = await axios.get(`products/${params.id}`);
+
+      const product: Product = res.data.data;
+
+      title.value = product.title;
+      description.value = product.description;
+      image.value = product.image;
+      price.value = product.price;
+    });
 
     const submit = async () => {
-      await axios.post(`/products`, {
+      await axios.post(`/products/${params.id}`, {
         title: title.value,
         description: description.value,
         price: price.value,
