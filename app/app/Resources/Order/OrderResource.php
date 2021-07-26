@@ -16,6 +16,7 @@ class OrderResource extends JsonResource
             'id' => $model->id,
             'name' => $model->name,
             'email' => $model->email,
+            'total' => $model->total,
             'items' => OrderItemResource::collection($model->items)
         ];
     }

@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Api\V1\Order;
 
 use App\Http\Controllers\Api\ApiController;
+use App\Models\Order\Item;
 use App\Models\Order\Order;
-use App\Models\Product\Product;
 use App\Repositories\Order\OrderRepository;
-use App\Repositories\Product\ProductRepository;
 use App\Resources\Order\OrderResource;
-use App\Resources\Product\ProductResource;
 use App\Services\Order\OrderService;
-use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\V1\Order as OrderRequest;
 
@@ -41,6 +38,38 @@ class OrderController extends ApiController
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
     }
+
+    public function export()
+    {
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=orders.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+        ];
+
+        $callback = function (){
+            $orders = Order::all();
+            $file = fopen('php://output', 'w');
+
+            //Header Row
+            fputcsv($file, ['ID', 'Name', 'Email', 'Product title', 'Price', 'Quantity']);
+            // Body
+            foreach ($orders as $order){
+                fputcsv($file, [$order->id, $order->name, $order->email, '', '', '']);
+
+                foreach ($order->items as $item){
+                    /** @var $item Item */
+                    fputcsv($file, ['', '', '', $item->product_title, $item->price, $item->quantity]);
+                }
+            }
+
+            fclose($file);
+        };
+
+        return \Response::stream($callback, 200, $headers);
+    }
+
 
     public function create(OrderRequest\Create $request)
     {

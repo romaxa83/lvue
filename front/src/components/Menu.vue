@@ -38,6 +38,14 @@
           Products
         </router-link>
 
+        <router-link
+            to="/orders"
+            active-class="bg-purple-50 border-purple-600 text-purple-600"
+            class="border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50 group border-l-4 py-2 px-3 flex items-center text-sm font-medium"
+        >
+          Orders
+        </router-link>
+
 
 
 <!--        <a href="#" class="bg-purple-50 border-purple-600 text-purple-600 group border-l-4 py-2 px-3 flex items-center text-sm font-medium">-->

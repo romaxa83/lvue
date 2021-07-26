@@ -30,6 +30,7 @@ Route::middleware('auth:api')->group(function() {
     Route::delete('products/{product}', [V1\Product\ProductController::class, 'delete'])->name('api.v1.product.delete');
     // Order
     Route::get('orders', [V1\Order\OrderController::class, 'list'])->name('api.v1.order.list');
+    Route::get('orders/export', [V1\Order\OrderController::class, 'export'])->name('api.v1.order.export');
     Route::get('orders/{order}', [V1\Order\OrderController::class, 'one'])->name('api.v1.order.one');
     Route::post('orders', [V1\Order\OrderController::class, 'create'])->name('api.v1.order.create');
     Route::post('orders/{order}', [V1\Order\OrderController::class, 'edit'])->name('api.v1.order.edit');

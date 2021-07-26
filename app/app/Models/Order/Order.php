@@ -34,6 +34,13 @@ class Order extends Model
         ];
     }
 
+    public function getTotalAttribute()
+    {
+        return $this->items->sum(function(Item $model){
+            return $model->price * $model->quantity;
+        });
+    }
+
     //relations
 
     public function items(): HasMany

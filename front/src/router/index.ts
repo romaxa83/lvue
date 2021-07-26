@@ -12,6 +12,8 @@ import RoleEdit from '@/secure/role/RoleEdit.vue'
 import Products from '@/secure/product/Products.vue'
 import ProductCreate from '@/secure/product/ProductCreate.vue'
 import ProductEdit from '@/secure/product/ProductEdit.vue'
+import Orders from '@/secure/order/Orders.vue'
+import OrderItems from '@/secure/order/OrderItems.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -28,7 +30,9 @@ const routes: Array<RouteRecordRaw> = [
       {path: '/roles/:id/edit', component: RoleEdit},
       {path: '/products', component: Products},
       {path: '/products/create', component: ProductCreate},
-      {path: '/products/:id/edit', component: ProductEdit}
+      {path: '/products/:id/edit', component: ProductEdit},
+      {path: '/orders', component: Orders},
+      {path: '/orders/:id', component: OrderItems}
     ]
   },
   {
