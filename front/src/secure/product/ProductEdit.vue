@@ -195,7 +195,7 @@ export default {
     const {params} = useRoute();
 
     onMounted(async () => {
-      const res = await axios.get(`products/${params.id}`);
+      const res = await axios.get(`products/${params.id }`);
 
       const product: Product = res.data.data;
 

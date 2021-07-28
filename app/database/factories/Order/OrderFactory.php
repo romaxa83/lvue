@@ -15,7 +15,8 @@ class OrderFactory extends Factory
         return [
             'name' => $this->faker->firstName,
             'email' => $this->faker->email,
-            'status' => $st[random_int(0,2)]
+            'status' => $st[random_int(0,2)],
+            'created_at' => $this->faker->dateTime
         ];
     }
 }

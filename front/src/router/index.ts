@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Register from '@/public/Register.vue'
 import Login from '@/public/Login.vue'
 import Secure from '@/secure/Secure.vue'
+import Profile from '@/secure/profile/Profile.vue'
 import Dashboard from '@/secure/dashboard/Dashboard.vue'
 import Users from '@/secure/user/Users.vue'
 import UserCreate from '@/secure/user/UserCreate.vue'
@@ -21,6 +22,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Secure,
     children: [
       {path: '', redirect: '/dashboard'},
+      {path: '/profile', component: Profile},
       {path: '/dashboard', component: Dashboard},
       {path: '/users', component: Users},
       {path: '/users/create', component: UserCreate},

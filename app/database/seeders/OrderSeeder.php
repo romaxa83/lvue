@@ -13,7 +13,7 @@ class OrderSeeder extends BaseSeeder
 //        \DB::table('products')->truncate();
 //        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
-        if(Order::count() === 0){
+//        if(Order::count() === 0){
             Order::factory(20)->create()
                 ->each(function ($order){
                     Item::factory(random_int(1,5))->create([
@@ -21,6 +21,6 @@ class OrderSeeder extends BaseSeeder
                     ]);
                 })
             ;
-        }
+//        }
     }
 }

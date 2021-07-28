@@ -39,4 +39,6 @@ Route::middleware('auth:api')->group(function() {
     Route::get('permissions', [V1\User\PermissionController::class, 'list'])->name('api.v1.permission.list');
     // Upload
     Route::post('upload', [V1\Media\UploadController::class, 'upload'])->name('api.v1.file.upload');
+    // Dashboard
+    Route::get('chart', [V1\Dashboard\DashboardController::class, 'chart'])->name('api.v1.dashboard.chart');
 });
