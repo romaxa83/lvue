@@ -51,13 +51,17 @@
 
 <script>
 import {useRouter} from "vue-router";
+import {useStore} from "vuex";
+import {computed} from "vue";
 
 export default {
   name: "Nav",
-  props: ['user'],
 
   setup () {
     const router = useRouter();
+    const store = useStore();
+
+    const user = computed(() => store.state.user);
 
     const logout = () => {
       localStorage.clear();
@@ -66,6 +70,7 @@ export default {
     }
 
     return {
+      user,
       logout,
     };
   }

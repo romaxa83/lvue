@@ -38,7 +38,28 @@ class UserService
 
             $model->name = $data['name'];
             $model->email = $data['email'];
-            $model->role_id = $data['roleId'];
+
+            $model->role_id = $data['roleId'] ;
+
+            $model->save();
+
+            DB::commit();
+
+            return $model;
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            \Log::error($e->getMessage());
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function editProfile(array $data, User $model): User
+    {
+        DB::beginTransaction();
+        try {
+
+            $model->name = $data['name'];
+            $model->email = $data['email'];
 
             $model->save();
 

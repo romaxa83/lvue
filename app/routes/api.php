@@ -10,6 +10,7 @@ Route::middleware('auth:api')->group(function() {
 
     // Auth user
     Route::get('user', [V1\Auth\AuthController::class, 'user'])->name('api.v1.auth.user');
+    Route::post('profile/edit', [V1\User\ProfileController::class, 'edit'])->name('api.v1.profile.edit');
     // User
     Route::get('users', [V1\User\UserController::class, 'list'])->name('api.v1.user.list');
     Route::get('users/{user}', [V1\User\UserController::class, 'one'])->name('api.v1.user.one');

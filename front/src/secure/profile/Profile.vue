@@ -1,7 +1,6 @@
 <template>
 
   <div>
-
     <!-- Breadcrumbs -->
     <nav class="bg-white border-b border-gray-200 flex" aria-label="Breadcrumb">
       <ol class="max-w-screen-xl w-full mx-auto px-4 flex space-x-4 sm:px-6 lg:px-8">
@@ -143,9 +142,10 @@
 </template>
 
 <script>
-import {onMounted, ref} from "vue";
+import {onMounted, ref, computed} from "vue";
 import axios from "axios";
 import {User} from "@/classes/user";
+import {useStore} from "vuex";
 
 export default {
   name: "Profile",
@@ -154,25 +154,29 @@ export default {
     const email = ref('');
     const newPassword = ref('');
     const oldPassword = ref('');
+    const store = useStore();
 
     onMounted(async () => {
-      const res = await axios.get(`/user`);
+      // const res = await axios.get(`/user`);
 
-      const user = res.data.data;
+      const user = computed(() => store.state.user);
 
-      name.value = user.name;
-      email.value = user.email;
+      name.value = user.value.name;
+      email.value = user.value.email;
       newPassword.value = '';
       oldPassword.value = '';
     });
 
     const submit = async () => {
-      await axios.post(`/profile/edit`, {
+      const res = await axios.post(`/profile/edit`, {
         name: name.value,
         email: email.value,
         newPassword: newPassword.value,
         oldPassword: oldPassword.value,
       });
+
+      console.log(res.data.data);
+      await store.dispatch('setUser', res.data.data)
 
     }
 

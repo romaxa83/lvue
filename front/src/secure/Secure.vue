@@ -1,6 +1,6 @@
 <template>
 
-  <Nav :user="user" />
+  <Nav />
 
   <div class="h-screen bg-white overflow-hidden flex">
 
@@ -17,7 +17,7 @@
       <main class="flex-1 overflow-y-auto focus:outline-none">
         <div class="relative max-w-7xl mx-auto md:px-8 xl:px-0">
 
-          <router-view />
+          <router-view v-if="user" />
 
         </div>
       </main>
@@ -31,6 +31,7 @@
   import {onMounted, ref} from 'vue';
   import axios from 'axios';
   import {useRouter} from 'vue-router'
+  import {useStore} from 'vuex'
   import Nav from '@/components/Nav.vue'
   import Menu from '@/components/Menu.vue'
 
@@ -45,10 +46,13 @@
     setup () {
       const router = useRouter();
       const user = ref(null);
+      const store = useStore();
 
       onMounted(async () => {
         try {
           const res = await axios.get('/user');
+
+          await store.dispatch('setUser', res.data.data);
 
           user.value = res.data.data;
           // console.log(res.data.data);
