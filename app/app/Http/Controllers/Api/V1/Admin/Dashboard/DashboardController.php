@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Dashboard;
+namespace App\Http\Controllers\Api\V1\Admin\Dashboard;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Order\Order;

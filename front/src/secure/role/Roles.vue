@@ -82,6 +82,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <router-link
+                          v-if="authUser.canEdit('role')"
                           :to="`/roles/${role.id}/edit`"
                           class="text-indigo-600 hover:text-indigo-900">
                         Edit
@@ -106,13 +107,16 @@
 </template>
 
 <script lang="ts">
-  import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
   import axios from 'axios';
   import {Entity} from '@/interfaces/entity';
+import {useStore} from "vuex";
 
   export default {
     name: "Roles",
     setup() {
+      const store = useStore();
+      const authUser = computed(() => store.state.User.user);
       const roles = ref([]);
 
       const load = async () => {
@@ -134,7 +138,8 @@
 
     return {
       roles,
-      del
+      del,
+      authUser
     };
   }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Media;
+namespace App\Http\Controllers\Api\V1\Admin\Media;
 
 use App\Http\Controllers\Api\ApiController;
 use Illuminate\Http\Request;

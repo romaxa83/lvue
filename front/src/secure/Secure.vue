@@ -17,7 +17,7 @@
       <main class="flex-1 overflow-y-auto focus:outline-none">
         <div class="relative max-w-7xl mx-auto md:px-8 xl:px-0">
 
-          <router-view v-if="user" />
+          <router-view v-if="user?.id" />
 
         </div>
       </main>
@@ -27,13 +27,14 @@
 
 </template>
 
-<script>
+<script lang="ts">
   import {onMounted, ref} from 'vue';
   import axios from 'axios';
   import {useRouter} from 'vue-router'
   import {useStore} from 'vuex'
   import Nav from '@/components/Nav.vue'
   import Menu from '@/components/Menu.vue'
+  import {User} from '@/classes/user'
 
   export default {
     name: "Secure",
@@ -51,13 +52,18 @@
       onMounted(async () => {
         try {
           const res = await axios.get('/user');
+          const u: User = res.data.data;
 
-          await store.dispatch('setUser', res.data.data);
+          await store.dispatch('User/setUser', new User(
+              u.id,
+              u.name,
+              u.email,
+              u.role
+          ));
 
-          user.value = res.data.data;
-          // console.log(res.data.data);
+          user.value = u;
+          console.log(user.value);
         } catch (e){
-
           await router.push('/')
         }
       });

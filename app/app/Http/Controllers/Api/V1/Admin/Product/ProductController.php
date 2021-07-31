@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Product;
+namespace App\Http\Controllers\Api\V1\Admin\Product;
 
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Product\Product;

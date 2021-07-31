@@ -153,9 +153,6 @@ export default {
       await router.push('/')
     };
 
-
-
-
     return {
       email,
       password,

@@ -141,7 +141,7 @@
 
 </template>
 
-<script>
+<script lang="ts">
 import {onMounted, ref, computed} from "vue";
 import axios from "axios";
 import {User} from "@/classes/user";
@@ -159,7 +159,7 @@ export default {
     onMounted(async () => {
       // const res = await axios.get(`/user`);
 
-      const user = computed(() => store.state.user);
+      const user = computed(() => store.state.User.user);
 
       name.value = user.value.name;
       email.value = user.value.email;
@@ -175,8 +175,16 @@ export default {
         oldPassword: oldPassword.value,
       });
 
-      console.log(res.data.data);
-      await store.dispatch('setUser', res.data.data)
+      // console.log(res.data.data);
+
+      const u: User = res.data.data;
+
+      await store.dispatch('User/setUser', new User(
+          u.id,
+          u.name,
+          u.email,
+          u.role,
+      ))
 
     }
 

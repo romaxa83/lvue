@@ -21,7 +21,7 @@
                 </svg>
               </button>
             </div>
-            <router-link to="/profile" class="text-base font-medium text-gray-500 hover:text-gray-900">{{user?.email}}</router-link>
+            <router-link to="/profile" class="text-base font-medium text-gray-500 hover:text-gray-900">{{user.fullName}}</router-link>
             <!--    <a href="#" class="text-base font-medium text-gray-500 hover:text-gray-900">-->
             <!--      Docs-->
             <!--    </a>-->
@@ -53,6 +53,7 @@
 import {useRouter} from "vue-router";
 import {useStore} from "vuex";
 import {computed} from "vue";
+import axios from "axios";
 
 export default {
   name: "Nav",
@@ -61,11 +62,12 @@ export default {
     const router = useRouter();
     const store = useStore();
 
-    const user = computed(() => store.state.user);
+    const user = computed(() => store.state.User.user);
 
-    const logout = () => {
+    const logout = async () => {
+      await axios.post('logout',{})
+
       localStorage.clear();
-      console.log('logout');
       router.push('/');
     }
 

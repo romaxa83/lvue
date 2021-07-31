@@ -106,6 +106,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <router-link
+                          v-if="authUser.canEdit('product')"
                           :to="`/products/${product.id}/edit`"
                           class="text-indigo-600 hover:text-indigo-900">
                         Edit
@@ -135,10 +136,11 @@
 </template>
 
 <script lang="ts">
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import axios from 'axios';
 import {Entity} from '@/interfaces/entity';
 import Paginator from "@/components/Paginator.vue";
+import {useStore} from "vuex";
 
 export default {
   name: "Products",
@@ -146,6 +148,8 @@ export default {
   setup() {
     const products = ref([]);
     const lastPage = ref(0);
+    const store = useStore();
+    const authUser = computed(() => store.state.User.user);
 
     const load = async (page: number) => {
       const res = await axios.get(`/products?page=${page}`);
@@ -168,7 +172,8 @@ export default {
       products,
       lastPage,
       del,
-      load
+      load,
+      authUser
     };
   }
 }

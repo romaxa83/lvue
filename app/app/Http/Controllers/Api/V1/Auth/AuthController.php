@@ -47,6 +47,13 @@ class AuthController extends ApiController
             \Auth::login($user);
 
             return $this->successJsonMessage($tokens);
+
+            // авторизация через cookie
+//            $token = $tokens['access_token'];
+//            $cookie = \cookie('jwt', $token, 3600);
+//
+//            return \response(['token' => $token])->withCookie($cookie);
+
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
@@ -58,7 +65,25 @@ class AuthController extends ApiController
             $user = \Auth::user();
 
             return UserResource::make($user);
+        } catch (\Exception $e){
+            return $this->errorJsonMessage($e->getMessage(), $e->getCode());
+        }
+    }
 
+    public function logout()
+    {
+        try {
+            /** @var $user User */
+            $user = \Auth::user();
+
+            $this->passportService->logout($user);
+
+            return $this->successJsonMessage(true);
+
+            // через cookie
+//            $cookie = \Cookie::forget('jwt');
+//
+//            return \response(['message' => 'success'])->withCookie($cookie);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
