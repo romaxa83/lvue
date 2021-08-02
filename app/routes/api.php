@@ -3,18 +3,27 @@
 use App\Http\Controllers\Api\V1;
 use Illuminate\Support\Facades\Route;
 
-Route::post('login', [V1\Auth\AuthController::class, 'login'])->name('api.v1.auth.login');
 Route::post('register', [V1\Auth\AuthController::class, 'register'])->name('api.v1.auth.register');
 
+// Common
 Route::group([
-    'middleware' => 'auth:api',
-    'prefix' => 'admin'
+    'middleware' => ['auth:api'],
 ], function(){
-    // Auth
-    Route::post('logout', [V1\Auth\AuthController::class, 'logout'])->name('api.v1.auth.logout');
     // Auth user
     Route::get('user', [V1\Auth\AuthController::class, 'user'])->name('api.v1.auth.user');
+    Route::post('logout', [V1\Auth\AuthController::class, 'logout'])->name('api.v1.auth.logout');
+
     Route::post('profile/edit', [V1\Admin\User\ProfileController::class, 'edit'])->name('api.v1.admin.profile.edit');
+});
+
+// Admin
+Route::post('admin/login', [V1\Auth\AuthController::class, 'login'])->name('api.v1.auth.login');
+
+Route::group([
+    'middleware' => ['auth:api', 'scope:admin'],
+    'prefix' => 'admin'
+], function(){
+
     // User
     Route::get('users', [V1\Admin\User\UserController::class, 'list'])->name('api.v1.admin.user.list');
     Route::get('users/{user}', [V1\Admin\User\UserController::class, 'one'])->name('api.v1.admin.user.one');
@@ -48,7 +57,15 @@ Route::group([
     Route::get('chart', [V1\Admin\Dashboard\DashboardController::class, 'chart'])->name('api.v1.admin.dashboard.chart');
 });
 
-//Route::middleware('auth:api')->group(function() {
-//
-//
-//});
+// Public
+Route::group([
+    'prefix' => 'influencer'
+], function(){
+    // Product
+    Route::get('products', [V1\Influencer\ProductController::class, 'list'])->name('api.v1.influencer.product.list');
+    Route::group([
+        'middleware' => ['auth:api', 'scope:influencer'],
+    ], function(){
+
+    });
+});

@@ -52,6 +52,8 @@
       onMounted(async () => {
         try {
           const res = await axios.get('/user');
+          console.log(res);
+
           const u: User = res.data.data;
 
           await store.dispatch('User/setUser', new User(
@@ -67,7 +69,7 @@
           await router.push('/')
         }
       });
-
+console.log('f');
       const logout = () => {
         localStorage.clear();
         console.log('logout');

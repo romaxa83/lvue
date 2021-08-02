@@ -23,7 +23,13 @@ class PassportService
      * @return array
      * @throws Throwable
      */
-    public function auth(string $username, string $password, int $clientId, string $clientSecret): array
+    public function auth(
+        string $username,
+        string $password,
+        int $clientId,
+        string $clientSecret,
+        string $scope
+    ): array
     {
         try {
             return $this->issueToken(
@@ -33,6 +39,7 @@ class PassportService
                     'grant_type' => 'password',
                     'client_id' => $clientId,
                     'client_secret' => $clientSecret,
+                    'scope' => $scope
                 ]
             );
         } catch (Throwable $exception) {

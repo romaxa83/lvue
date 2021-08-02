@@ -16,7 +16,9 @@ class UserResource extends JsonResource
             'id' => $model->id,
             'name' => $model->name,
             'email' => $model->email,
-            'role' => RoleResource::make($model->role)
+            $this->mergeWhen(!\Auth::user()->isInfluencer(), [
+                'role' => RoleResource::make($model->role)
+            ]),
         ];
     }
 }

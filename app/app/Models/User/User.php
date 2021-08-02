@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
@@ -19,7 +20,7 @@ use Laravel\Passport\HasApiTokens;
  * @property string remember_token
  * @property Carbon created_at
  * @property Carbon updated_at
- * @property int role_id
+ * @property bool is_influencer
  */
 
 
@@ -31,11 +32,24 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_influencer' => 'boolean',
     ];
 
-    public function role(): BelongsTo
+    public function isInfluencer(): bool
     {
-        return $this->belongsTo(Role::class);
+        return $this->is_influencer;
+    }
+
+    public function role(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+            Role::class,
+            UserRole::class,
+            'user_id',
+            'id',
+            'id',
+            'role_id'
+        );
     }
 
     // переопределение метода для паспорт

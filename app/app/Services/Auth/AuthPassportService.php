@@ -17,13 +17,14 @@ abstract class AuthPassportService
      * @return array
      * @throws Throwable
      */
-    public function auth(string $username, string $password): array
+    public function auth(string $username, string $password, string $scope = ''): array
     {
         return $this->passportService->auth(
             $username,
             $password,
             $this->getClientId(),
-            $this->getClientSecret()
+            $this->getClientSecret(),
+            $scope
         );
     }
 

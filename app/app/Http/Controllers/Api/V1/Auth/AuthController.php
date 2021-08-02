@@ -11,6 +11,7 @@ use App\Resources\User\UserResource;
 use App\Services\Auth\UserPassportService;
 use App\Services\User\UserService;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends ApiController
 {
@@ -24,9 +25,9 @@ class AuthController extends ApiController
     public function register(RegisterRequest $request)
     {
         try {
-            $model = $this->userService->create($request->all());
+            $model = $this->userService->createFromRegister($request->all());
 
-            return UserResource::make($model);
+            return $this->successJsonMessage([]);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
         }
@@ -37,12 +38,17 @@ class AuthController extends ApiController
         try {
             /** @var $user User */
             $user = $this->userRepository->findOneBy('email', $request['email']);
+            $scope = $request['scope'];
 
             if(!$user || !\Hash::check($request->password, $user->password)){
                 return response()->json(['error' => 'The provided credentials are incorrect.'], 401);
             }
 
-            $tokens = $this->passportService->auth($user->id, $request->password);
+            if($user->isInfluencer() && $scope != 'influencer'){
+                return $this->errorJsonMessage('Access denied!', Response::HTTP_FORBIDDEN);
+            }
+
+            $tokens = $this->passportService->auth($user->id, $request->password, $scope);
 
             \Auth::login($user);
 
