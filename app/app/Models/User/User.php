@@ -2,6 +2,7 @@
 
 namespace App\Models\User;
 
+use App\Models\Order\Order;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -56,5 +57,15 @@ class User extends Authenticatable
     public function findForPassport($username)
     {
         return self::where('id', $username)->first();
+    }
+
+    public function getRevenueAttribute()
+    {
+        $orders = Order::where('user_id', $this->id)
+            ->where('status', Order::DONE)->get();
+
+        return $orders->sum(function (Order $order){
+            return $order->influencer_total;
+        });
     }
 }

@@ -36,6 +36,21 @@ abstract class AbstractRepository
         return $this->getAllQuery($relations, $sortField, $sort)->get();
     }
 
+    public function getAllBy(
+        string $field,
+        string $value,
+        array $relations = [],
+        $sortField = 'id',
+        $sort = 'asc'
+    ): Collection
+    {
+        return $this->getQuery()
+            ->where($field, $value)
+            ->with($relations)
+            ->orderBy($sortField, $sort)
+            ->get();
+    }
+
     public function getAllPaginator(array $params, array $relations = [], $sortField = 'id', $sort = 'asc'): LengthAwarePaginator
     {
         $perPage = $params['perPage'] ?? self::DEFAULT_LIMIT;

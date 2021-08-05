@@ -71,17 +71,6 @@ class OrderController extends ApiController
     }
 
 
-    public function create(OrderRequest\Create $request)
-    {
-        try {
-            $model = $this->service->create($request->all());
-
-            return OrderResource::make($model);
-        } catch (\Exception $e){
-            return $this->errorJsonMessage($e->getMessage(), $e->getCode());
-        }
-    }
-
     public function edit(OrderRequest\Update $request, Order $order)
     {
         try {

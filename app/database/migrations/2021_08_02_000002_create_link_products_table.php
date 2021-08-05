@@ -9,7 +9,7 @@ class CreateLinkProductsTable extends Migration
     public function up(): void
     {
         Schema::create('link_products', function (Blueprint $table) {
-            $table->unsignedBigInteger('link_id')->unique();
+            $table->unsignedBigInteger('link_id');
             $table->foreign('link_id')
                 ->references('id')
                 ->on('links')

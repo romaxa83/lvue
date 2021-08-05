@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string product_title
  * @property float price
  * @property int quantity
+ * @property float influencer_revenue
+ * @property float admin_revenue
  * @property string created_at
  * @property string updated_at
  */

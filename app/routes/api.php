@@ -46,7 +46,6 @@ Route::group([
     Route::get('orders', [V1\Admin\Order\OrderController::class, 'list'])->name('api.v1.admin.order.list');
     Route::get('orders/export', [V1\Admin\Order\OrderController::class, 'export'])->name('api.v1.admin.order.export');
     Route::get('orders/{order}', [V1\Admin\Order\OrderController::class, 'one'])->name('api.v1.admin.order.one');
-    Route::post('orders', [V1\Admin\Order\OrderController::class, 'create'])->name('api.v1.admin.order.create');
     Route::post('orders/{order}', [V1\Admin\Order\OrderController::class, 'edit'])->name('api.v1.admin.order.edit');
     Route::delete('order/{order}', [V1\Admin\Order\OrderController::class, 'delete'])->name('api.v1.admin.order.delete');
     // Permissions
@@ -66,6 +65,16 @@ Route::group([
     Route::group([
         'middleware' => ['auth:api', 'scope:influencer'],
     ], function(){
-
+        Route::post('links', [V1\Influencer\LinkController::class, 'create'])->name('api.v1.influencer.link.create');
+        Route::get('stats', [V1\Influencer\StatsController::class, 'index'])->name('api.v1.influencer.stats.index');
+        Route::get('rankings', [V1\Influencer\StatsController::class, 'ranking'])->name('api.v1.influencer.stats.ranking');
     });
+});
+
+Route::group([
+    'prefix' => 'checkout'
+], function(){
+    Route::get('links/{code}', [V1\Checkout\LinkController::class, 'show'])->name('api.v1.checkout.link.show');
+    Route::post('orders', [V1\Checkout\OrderController::class, 'create'])->name('api.v1.checkout.order.create');
+    Route::post('orders/confirm', [V1\Checkout\OrderController::class, 'confirm'])->name('api.v1.checkout.order.confirm');
 });

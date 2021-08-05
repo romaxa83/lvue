@@ -19,6 +19,8 @@ class CreateOrderItemsTable extends Migration
             $table->string('product_title');
             $table->decimal('price');
             $table->unsignedInteger('quantity');
+            $table->decimal('influencer_revenue');
+            $table->decimal('admin_revenue');
 
             $table->timestamps();
         });

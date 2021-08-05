@@ -65,6 +65,28 @@ services:
     working_dir: /app
     tty: true  #позволяет процесу nodejs висеть постояно
 
+  redis:
+    image: redis:5.0-alpine
+    container_name: lvue__redis
+    hostname: lvue__redis
+    ports:
+      - 192.168.179.1:6379:6379
+    command:
+      - 'redis-server'
+      - '--databases 2'
+      - '--save 900 1'
+      - '--save 300 10'
+      - '--save 60 10000'
+      - '--requirepass secret'
+
+  mailer:
+    image: mailhog/mailhog
+    container_name: lvue__mailer
+    hostname: lvue__mailer
+    ports:
+      - 192.168.179.1:8025:8025
+      - 192.168.179.1:1025:1025
+
 networks:
   default:
     driver: bridge

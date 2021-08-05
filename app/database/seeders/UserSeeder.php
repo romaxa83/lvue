@@ -9,10 +9,10 @@ class UserSeeder extends BaseSeeder
 {
     public function run()
     {
-        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        \DB::table('users')->truncate();
-        \DB::table('user_roles')->truncate();
-        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+//        \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+//        \DB::table('users')->truncate();
+//        \DB::table('user_roles')->truncate();
+//        \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         if(User::count() === 0){
             $admin = User::factory()->create([
@@ -22,6 +22,12 @@ class UserSeeder extends BaseSeeder
             UserRole::create([
                 'user_id' => $admin->id,
                 'role_id' => 1
+            ]);
+
+            User::factory()->create([
+                'name' => 'inf',
+                'email' => 'inf@inf.com',
+                'is_influencer' => true,
             ]);
 
             random_int(2, 4);
