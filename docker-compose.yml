@@ -42,24 +42,47 @@ services:
     volumes:
       - ./app/storage/db/:/var/lib/mysql/
 
+  admin-nginx:
+    build:
+      context: ./admin/docker
+      dockerfile: dev/nginx/Dockerfile
+    container_name: lvue__admin_nginx
+    hostname: lvue__admin_nginx
+    volumes:
+      - ./admin:/app
+      - ./admin/storage/logs:/var/log/nginx
+    ports:
+      - 192.168.179.1:8081:80
+
+  admin-node:
+    build:
+      context: ./admin/docker
+      dockerfile: dev/node/Dockerfile
+    container_name: lvue__admin_node
+    hostname: lvue__admin_node
+    volumes:
+      - ./admin:/app
+    working_dir: /app
+    tty: true  #позволяет процесу nodejs висеть постояно
+
   front-nginx:
     build:
       context: ./front/docker
       dockerfile: dev/nginx/Dockerfile
-    container_name: lvue__front_nginx
-    hostname: lvue__front_nginx
+    container_name: lvue__FRONT_nginx
+    hostname: lvue__FRONT_nginx
     volumes:
       - ./front:/app
       - ./front/storage/logs:/var/log/nginx
     ports:
-      - 192.168.179.1:8081:80
+      - 192.168.179.1:8082:80
 
   front-node:
     build:
       context: ./front/docker
       dockerfile: dev/node/Dockerfile
-    container_name: lvue__front_node
-    hostname: lvue__front_node
+    container_name: lvue__FRONT_node
+    hostname: lvue__FRONT_node
     volumes:
       - ./front:/app
     working_dir: /app

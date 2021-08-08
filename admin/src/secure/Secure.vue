@@ -69,7 +69,7 @@
           await router.push('/')
         }
       });
-console.log('f');
+
       const logout = () => {
         localStorage.clear();
         console.log('logout');

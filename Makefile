@@ -2,7 +2,9 @@
 
 #=============VARIABLES================
 php_container = lvue__app_php-fpm
-node_container = lvue__front_node
+node_admin_container = lvue__admin_node
+node_front_container = lvue__FRONT_node
+redis_container = lvue__redis
 
 ip = 192.168.179.1
 #======================================
@@ -73,8 +75,8 @@ perm:
 php_bash:
 	docker exec -it $(php_container) bash
 
-node_bash:
-	docker exec -it $(node_container) bash
+redis_bash:
+	docker exec -it $(redis_container) sh
 
 db_bash:
 	docker exec -it $(db_container) sh
@@ -105,9 +107,10 @@ test_run:
 info_domen:
 	echo '---------------------------------------------------------------------------------------------';
 	echo '--------------------------------DEV MODE-----------------------------------------------------';
-	echo http://$(ip):8080;
-	echo http://$(ip):8081;
-	echo Mailer http://$(ip):8025;
+	echo [APP] http://$(ip):8080;
+	echo [Admin] http://$(ip):8081;
+	echo [Front] http://$(ip):8082;
+	echo [Mailer] http://$(ip):8025;
 	echo '---------------------------------------------------------------------------------------------';
 
 

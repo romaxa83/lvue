@@ -128,37 +128,31 @@
 </template>
 
 <script>
-import {ref} from 'vue';
 import axios from 'axios'
-import {useRouter} from 'vue-router'
 
 export default {
   name: "Login",
-  setup() {
-    const email = ref('');
-    const password = ref('');
-    const router = useRouter()
-
-    const submit = async () => {
-
+  data() {
+    return {
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    async submit() {
       const res = await axios.post('/login', {
-        email: email.value,
-        password: password.value
+        email: this.email,
+        password: this.password,
+        scope: 'influencer'
       })
 
       localStorage.setItem('token', res.data.data.access_token);
       localStorage.setItem('tokenRefresh', res.data.data.refresh_token);
       axios.defaults.headers['Authorization'] = `Bearer ${res.data.data.access_token}`;
 
-      await router.push('/')
-    };
-
-    return {
-      email,
-      password,
-      submit
-    };
-  }
+      await this.$router.push('/')
+    }
+  },
 }
 </script>
 

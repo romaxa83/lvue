@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Admin\Product;
 
+use App\Events\Product\ProductUpdateEvent;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Product\Product;
 use App\Repositories\Product\ProductRepository;
@@ -32,6 +33,7 @@ class ProductController extends ApiController
     public function one(Product $product)
     {
         try {
+
             return ProductResource::make($product);
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
@@ -53,6 +55,8 @@ class ProductController extends ApiController
     {
         try {
             $model = $this->service->edit($request->all(), $product);
+
+            event(new ProductUpdateEvent());
 
             return ProductResource::make($model);
         } catch (\Exception $e){

@@ -91,7 +91,8 @@
                       {{user.email}}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {{user.role.name}}
+                      {{ user.role ? user.role.name : 'not role'}}
+
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <router-link
@@ -134,13 +135,14 @@ import {computed, onMounted, ref} from 'vue';
   export default {
     name: "Users",
     components: {Paginator},
+
     setup() {
       const store = useStore();
       const authUser = computed(() => store.state.User.user);
       const users = ref([]);
       const lastPage = ref(0);
 
-      const load = async (page: 1) => {
+      const load = async (page: number) => {
         const res = await axios.get(`/users?page=${page}`);
 
         users.value = res.data.data;
@@ -156,11 +158,11 @@ import {computed, onMounted, ref} from 'vue';
         }
       };
 
-
       onMounted(load);
 
       return {
         users,
+        lastPage,
         load,
         del,
         authUser
