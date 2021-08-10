@@ -21,6 +21,12 @@
           class="font-medium text-gray-500 hover:text-gray-900">
         {{user?.name}}
       </router-link>
+      <router-link
+          to="/rankings"
+          v-if="user"
+          class="font-medium text-gray-500 hover:text-gray-900">
+        Rankings
+      </router-link>
 
       <a href="javascript:void(0)"
          v-if="user"

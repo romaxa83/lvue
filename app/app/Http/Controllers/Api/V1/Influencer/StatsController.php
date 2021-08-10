@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1\Influencer;
 use App\Http\Controllers\Api\ApiController;
 use App\Models\Order\Order;
 use App\Models\Product\Link;
+use App\Models\User\User;
 use App\Repositories\Product\LinkRepository;
 use App\Repositories\User\UserRepository;
 use Illuminate\Http\Request;
@@ -48,9 +49,28 @@ class StatsController extends ApiController
     {
         try {
 
-            dd(Redis::zrange('rankings', 0, -1));
+            $users = $this->userRepository->getAllBy('is_influencer', true);
+            $temp = [];
+            $users->each(function(User $user, $i) use (&$temp){
+                $orders = Order::query()
+                    ->where('user_id', $user->id)
+                    ->where('status', Order::DONE)
+                    ->get();
 
-            return ;
+                $revenue = $orders->sum(function(Order $order){
+                    return (int)$order->influencer_total;
+                });
+
+                $temp[$i]['id'] = $user->id;
+                $temp[$i]['name'] = $user->name;
+                $temp[$i]['revenue'] = $revenue;
+            });
+
+            return $temp;
+
+//            dd(Redis::zrange('rankings', 0, -1));
+
+//            return ;
 //            return Redis::zrevrange('rankings', 0, -1, 'WITHSCORES');
         } catch (\Exception $e){
             return $this->errorJsonMessage($e->getMessage(), $e->getCode());
