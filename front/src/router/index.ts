@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '../pages/Layout.vue'
 import Home from '../pages/Home.vue'
 import Rankings from '../pages/Rankings.vue'
+import Stats from '../pages/Stats.vue'
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 
@@ -13,7 +14,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     children: [
       {path: '', component: Home},
-      {path: '/rankings', component: Rankings}
+      {path: '/rankings', component: Rankings},
+      {path: '/stats', component: Stats},
     ]
   }
 ]

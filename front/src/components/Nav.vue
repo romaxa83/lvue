@@ -4,7 +4,7 @@
 
     <div class="hidden md:block md:ml-10 md:pr-4 md:space-x-8">
       <router-link
-          to="#"
+          to="/"
           class="font-medium text-gray-500 hover:text-gray-900">
         Influencer
       </router-link>
@@ -26,6 +26,13 @@
           v-if="user"
           class="font-medium text-gray-500 hover:text-gray-900">
         Rankings
+      </router-link>
+
+      <router-link
+          to="/stats"
+          v-if="user"
+          class="font-medium text-gray-500 hover:text-gray-900">
+        Stats
       </router-link>
 
       <a href="javascript:void(0)"

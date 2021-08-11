@@ -5,7 +5,7 @@
     <div class="relative max-w-7xl mx-auto">
       <div class="text-center">
         <h2 class="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl">
-          Rankings
+          Stats
         </h2>
       </div>
 
@@ -14,10 +14,10 @@
           <thead class="bg-gray-50">
           <tr>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              #
+              Link
             </th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Name
+              Users
             </th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Revenue
@@ -26,18 +26,18 @@
           </thead>
           <tbody>
           <tr
-              v-for="(ranking, i) in rankings"
-              :key="ranking.id"
+              v-for="order in orders"
+              :key="order"
               class="bg-white"
           >
             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-              {{ i + 1}}
+              {{ link(order.code) }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ ranking.name }}
+              {{ order.count }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              {{ ranking.revenue }}
+              {{ order.revenue }}
             </td>
           </tr>
 
@@ -53,16 +53,21 @@
 import axios from "axios";
 
 export default {
-  name: "Rankings",
+  name: "Stats",
   data() {
     return {
-      rankings: []
+      orders: []
     }
   },
   async mounted() {
-    const {data} = await axios.get('/rankings');
+    const {data} = await axios.get('/stats');
 
-    this.rankings = data
+    this.orders = data
+  },
+  methods: {
+    link(code) {
+      return  `${process.env.VUE_APP_CHECKOUT}/links/${code}`
+    }
   }
 }
 </script>
