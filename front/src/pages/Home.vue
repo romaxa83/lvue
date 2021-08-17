@@ -153,7 +153,7 @@ export default {
           productIds: this.selected
         });
 
-        this.link = `${process.env.VUE_APP_CHECKOUT}/links/${data.data.code}`;
+        this.link = `${process.env.VUE_APP_CHECKOUT}/${data.data.code}`;
       } catch (e){
         this.error = true;
       }

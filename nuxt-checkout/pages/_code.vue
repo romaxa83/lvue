@@ -3,7 +3,7 @@
     <main>
       <div class="py-5 text-center">
         <h2>Welcome</h2>
-        <p class="lead">Name has invited you to buy these item(s)</p>
+        <p class="lead">{{user.name}} has invited you to buy these item(s)</p>
       </div>
 
       <div class="row g-5">
@@ -12,16 +12,35 @@
             <span class="text-primary">Product</span>
           </h4>
           <ul class="list-group mb-3">
-            <li class="list-group-item d-flex justify-content-between lh-sm">
-              <div>
-                <h6 class="my-0">Product name</h6>
-                <small class="text-muted">Brief description</small>
-              </div>
-              <span class="text-muted">$12</span>
-            </li>
+
+            <template v-for="product in products">
+              <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div>
+                  <h6 class="my-0">{{product.title}}</h6>
+                  <small class="text-muted">{{product.description}}</small>
+                </div>
+                <span class="text-muted">${{product.price}}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between lh-sm">
+                <div>
+                  <h6 class="my-0">Quantity</h6>
+                </div>
+<!--                <input-->
+<!--                  type="number"-->
+<!--                  min="0"-->
+<!--                  class="text-muted form-control quantity">-->
+                <input
+                  v-model="quantities[product.id]"
+                  type="number"
+                  min="0"
+                  class="text-muted form-control quantity">
+              </li>
+            </template>
+
+
             <li class="list-group-item d-flex justify-content-between">
               <span>Total (USD)</span>
-              <strong>$20</strong>
+              <strong>${{total}}</strong>
             </li>
           </ul>
         </div>
@@ -91,6 +110,54 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import axios from "axios";
 
-export default Vue.extend({})
+export default Vue.extend({
+  async asyncData(ctx){
+    const {data} = await axios.get(`${process.env.BASE_URL}/links/${ctx.params.code}`);
+
+    const user = data.data.user;
+    const products = data.data.products;
+    const quantities = [];
+
+    products.forEach(
+      p => quantities[p.id] = 0
+    );
+
+    return {
+      user,
+      products,
+      quantities
+    }
+  },
+  data(){
+    return {
+      user: null ,
+      products: [],
+      quantities: []
+    }
+  },
+  computed: {
+    total() {
+      let total = 0;
+
+      this.products.forEach(
+        p => {
+          total += p.price * this.quantities[p?.id]
+        }
+      );
+
+      return total;
+    }
+  },
+  // mounted() {
+  //   console.log(this.$route.params);
+  // }
+})
 </script>
+
+<style scoped>
+  .quantity{
+    width: 55px;
+  }
+</style>
