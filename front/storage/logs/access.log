@@ -895,3 +895,6 @@
 192.168.179.1 - - [17/Aug/2021:17:03:36 +0000] "GET /js/app.js HTTP/1.1" 304 0 "http://192.168.179.1:8082/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36"
 192.168.179.1 - - [17/Aug/2021:17:03:36 +0000] "GET /js/chunk-vendors.js HTTP/1.1" 304 0 "http://192.168.179.1:8082/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36"
 192.168.179.1 - - [17/Aug/2021:17:03:36 +0000] "GET /favicon.ico HTTP/1.1" 200 4286 "http://192.168.179.1:8082/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36"
+192.168.179.1 - - [18/Aug/2021:16:51:20 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36"
+192.168.179.1 - - [18/Aug/2021:16:51:20 +0000] "GET /js/chunk-vendors.js HTTP/1.1" 200 1044349 "http://192.168.179.1:8082/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36"
+192.168.179.1 - - [18/Aug/2021:16:51:21 +0000] "GET /js/app.js HTTP/1.1" 200 4758598 "http://192.168.179.1:8082/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36"

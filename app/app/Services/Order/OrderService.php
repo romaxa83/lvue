@@ -53,7 +53,7 @@ class OrderService
 
                 $lineItems[] = [
                     'name' => $product->title,
-                    'descriptions' => $product->description,
+                    'description' => $product->description,
                     'images' => [
                         $product->image
                     ],
@@ -62,7 +62,6 @@ class OrderService
                     'currency' => 'usd',
                 ];
             }
-
             // @todo написано на быструю руку , вынести в отдельный сервис
             $stripe = Stripe::make(env('STRIP_SECRET_KEY'));
             $source = $stripe->checkout()->sessions()->create([
@@ -72,12 +71,13 @@ class OrderService
                 'cancel_url' => env('APP_URL') . '/error',
             ]);
 
+            dd($source);
             $model->transaction_id = $source['id'];
             $model->save();
 
             DB::commit();
 
-            return $source;
+//            return $source;
         } catch (\Throwable $e) {
 
             DB::rollBack();

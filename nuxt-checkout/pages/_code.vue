@@ -46,11 +46,17 @@
         </div>
         <div class="col-md-7 col-lg-8">
           <h4 class="mb-3">Personal info</h4>
-          <form class="needs-validation" novalidate>
+          <form class="needs-validation" novalidate @submit.prevent="submit">
             <div class="row g-3">
               <div class="col-sm-6">
                 <label for="firstName" class="form-label">First name</label>
-                <input type="text" class="form-control" id="firstName" placeholder="First name" required>
+                <input
+                  v-model="name"
+                  type="text"
+                  class="form-control"
+                  id="firstName"
+                  placeholder="First name"
+                  required>
               </div>
 
               <div class="col-sm-6">
@@ -60,32 +66,67 @@
 
               <div class="col-12">
                 <label for="email" class="form-label">Email </label>
-                <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+                <input
+                  v-model="email"
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  placeholder="you@example.com"
+                  required>
               </div>
 
               <div class="col-12">
                 <label for="address" class="form-label">Address</label>
-                <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                <input
+                  v-model="address"
+                  type="text"
+                  class="form-control"
+                  id="address"
+                  placeholder="1234 Main St"
+                  required>
               </div>
 
               <div class="col-12">
                 <label for="address2" class="form-label">Address 2 <span class="text-muted">(Optional)</span></label>
-                <input type="text" class="form-control" id="address2" placeholder="Apartment or suite">
+                <input
+                  v-model="address2"
+                  type="text"
+                  class="form-control"
+                  id="address2"
+                  placeholder="Apartment or suite">
               </div>
 
               <div class="col-md-5">
                 <label for="country" class="form-label">Country</label>
-                <input type="text" class="form-control" id="country" placeholder="Country" required>
+                <input
+                  v-model="country"
+                  type="text"
+                  class="form-control"
+                  id="country"
+                  placeholder="Country"
+                  required>
               </div>
 
               <div class="col-md-5">
                 <label for="city" class="form-label">City</label>
-                <input type="text" class="form-control" id="city" placeholder="City" required>
+                <input
+                  v-model="city"
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  placeholder="City"
+                  required>
               </div>
 
               <div class="col-md-2">
                 <label for="zipcode" class="form-label">Zip</label>
-                <input type="text" class="form-control" id="zipcode" placeholder="Zip" required>
+                <input
+                  v-model="zipcode"
+                  type="text"
+                  class="form-control"
+                  id="zipcode"
+                  placeholder="Zip"
+                  required>
               </div>
             </div>
 
@@ -108,13 +149,13 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from 'vue'
-import axios from "axios";
+import axios from '../plugins/axios.ts';
 
 export default Vue.extend({
   async asyncData(ctx){
-    const {data} = await axios.get(`${process.env.BASE_URL}/links/${ctx.params.code}`);
+    const {data} = await axios.get(`/links/${ctx.params.code}`);
 
     const user = data.data.user;
     const products = data.data.products;
@@ -134,7 +175,37 @@ export default Vue.extend({
     return {
       user: null ,
       products: [],
-      quantities: []
+      quantities: [],
+      name: '',
+      email: '',
+      address: '',
+      address2: '',
+      country: '',
+      city: '',
+      zipcode: '',
+    }
+  },
+  methods: {
+    async submit(){
+      const {data} = await axios.post('http://192.168.179.1:8080/api/v1/checkout/orders',{
+      // const {data} = await axios.post('/orders',{
+        name: this.name,
+        email: this.email,
+        address: this.address,
+        address2: this.address2,
+        country: this.country,
+        city: this.city,
+        zipcode: this.zipcode,
+        code: this.$route.params.code,
+        items: this.products.map(p => {
+          return {
+            productId: p.id,
+            quantity: this.quantities[p.id],
+          }
+        })
+      });
+
+      console.log(data);
     }
   },
   computed: {
@@ -143,7 +214,7 @@ export default Vue.extend({
 
       this.products.forEach(
         p => {
-          total += p.price * this.quantities[p?.id]
+          total += p.price * this.quantities[p.id]
         }
       );
 
